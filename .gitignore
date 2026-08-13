@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# FastAPI / Uvicorn logs
+*.log
+
+# Node / Vite / Svelte
+node_modules/
+dist/
+build/
+.vite/
+
+# Environment variables
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
