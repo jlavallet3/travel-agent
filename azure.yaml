@@ -1,0 +1,18 @@
+metadata:
+  template: "travel-agent-azure"
+  description: "Travel Agent - FastAPI backend on App Service"
+
+services:
+  backend:
+    project: ./backend
+    language: python
+    host: appservice
+
+env:
+  AZURE_RESOURCE_GROUP: rg-travel-agent-demo
+  AZURE_LOCATION: eastus
+  AZURE_ENV_NAME: demo
+
+infra:
+  path: ./infra
+  module: main

@@ -23,6 +23,12 @@ build/
 # Environment variables
 .env
 .env.*
+!.env.example
+
+# Azure / local packaging artifacts
+backend/.python_packages/
+backend.zip
+*.zip
 
 # VS Code
 .vscode/
