@@ -44,9 +44,15 @@ $settingsArgs = @(
     "AGENT_VERSION=$($settings['AGENT_VERSION'])"
 )
 az webapp config appsettings set -g $ResourceGroup -n $AppName --settings $settingsArgs | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to update app settings on '$AppName'."
+}
 
 Write-Host "Restarting app service..."
-az webapp restart -g $ResourceGroup -n $AppName --no-wait | Out-Null
+az webapp restart -g $ResourceGroup -n $AppName | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to restart App Service '$AppName'."
+}
 
 Write-Host "Settings synced successfully."
 $filter = "[?name=='PROJECT_ENDPOINT' || name=='AGENT_ID' || name=='AGENT_VERSION']"

@@ -7,6 +7,7 @@
     let messagesContainer;
     let agentTyping = false;
     let draft = "";
+    let composer;
     let darkMode = false;
 
     // reactive store
@@ -28,10 +29,17 @@
     });
 
     function handleKey(e) {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             sendDraft();
         }
+    }
+
+    function resizeComposer() {
+        if (!composer) return;
+
+        composer.style.height = "auto";
+        composer.style.height = `${Math.min(composer.scrollHeight, 160)}px`;
     }
 
     function handleClick() {
@@ -55,6 +63,7 @@
 
         agentTyping = true;
         draft = "";
+        resizeComposer();
     }
 
     onMount(() => {
@@ -108,12 +117,15 @@
     </div>
 
     <div class="input-bar">
-        <input
+        <textarea
+            bind:this={composer}
             bind:value={draft}
             placeholder={isConnected ? "Type a message..." : "Connecting..."}
             on:keydown={handleKey}
+            on:input={resizeComposer}
             disabled={!isConnected}
-        />
+            rows="1"
+        ></textarea>
 
         <button
             class="send-btn"
@@ -271,15 +283,19 @@
         border-color: #444;
     }
 
-    .input-bar input {
+    .input-bar textarea {
         flex: 1;
         padding: 0.75rem;
         border-radius: 8px;
         border: 1px solid #ccc;
         font-size: 1rem;
+        font-family: inherit;
+        line-height: 1.4;
+        resize: none;
+        overflow-y: auto;
     }
 
-    .chat.dark .input-bar input {
+    .chat.dark .input-bar textarea {
         background: #3a3a3a;
         color: #eee;
         border-color: #555;

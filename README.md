@@ -20,6 +20,7 @@ Install these, then open PowerShell in the repo root:
 | Azure Developer CLI (`azd`) | https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd |
 | Node.js 18+ | https://nodejs.org/ (needed only to build the frontend) |
 | Python 3.11 | optional for local runs |
+| Git for Windows | https://git-scm.com/download/win (provides `bash` for `build.sh`) |
 
 Log in and select **Azure subscription 1**:
 
@@ -140,13 +141,11 @@ On Azure, App Service application settings are the runtime source of truth. Loca
 From the repo root:
 
 ```powershell
-cd frontend
-npm install
-npm run build
-cd ..
+$bash = Get-Command bash -ErrorAction Stop
+& $bash.Source ./build.sh
 ```
 
-`build.sh` copies `frontend/dist` into `backend/frontend/dist` so FastAPI can serve it. If you skip this, the deployed site may say the frontend is not built.
+This runs the Bash build script from PowerShell. It installs the frontend dependencies, builds the Svelte app, and copies `frontend/dist` into `backend/frontend/dist`. `azd` deploys the `backend` folder, so this copy is required for FastAPI to serve the UI after deployment.
 
 ## 5. Deploy the App Service
 
@@ -240,9 +239,8 @@ The page should load, the chat control should show connected, and a travel quest
 ## 9. After a code change
 
 ```powershell
-cd frontend
-npm run build
-cd ..
+$bash = Get-Command bash -ErrorAction Stop
+& $bash.Source ./build.sh
 azd deploy
 $app = az webapp list -g rg-travel-agent-demo --query "[0].name" -o tsv
 ./scripts/Sync-FoundrySettings.ps1 -AppName $app
